@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Research Ethics Review Platform</title>
+    <meta name="description" content="Decentralized platform for anonymous research ethics review using blockchain technology">
+    <meta name="keywords" content="research ethics, peer review, blockchain, ethereum, anonymous, decentralized">
+    <meta name="author" content="Ethics Review Team">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#764ba2">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Anonymous Research Ethics Review Platform">
+    <meta property="og:description" content="Decentralized platform for anonymous research ethics review">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anonymous-research-ethics-review.vercel.app">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Anonymous Research Ethics Review Platform">
+    <meta name="twitter:description" content="Decentralized platform for anonymous research ethics review">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .wallet-section {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(250,245,255,0.95));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(126, 34, 206, 0.15);
+            border: 1px solid rgba(126, 34, 206, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #7e22ce, #9333ea);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            margin: 5px;
+            box-shadow: 0 4px 15px rgba(126, 34, 206, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(126, 34, 206, 0.5);
+            background: linear-gradient(45deg, #9333ea, #a855f7);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(126, 34, 206, 0.1);
+            border: 1px solid rgba(126, 34, 206, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .panel:hover {
+            box-shadow: 0 15px 40px rgba(126, 34, 206, 0.15);
+        }
+
+        .panel h2 {
+            color: #7e22ce;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #7e22ce;
+            box-shadow: 0 0 0 3px rgba(126, 34, 206, 0.1);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .status-submitted { background: #fef3c7; color: #92400e; }
+        .status-under-review { background: #7e22ce; color: white; }
+        .status-approved { background: #10b981; color: white; }
+        .status-rejected { background: #ef4444; color: white; }
+        .status-requires-revision { background: #f59e0b; color: white; }
+
+        .proposals-list, .reviewers-list {
+            grid-column: span 2;
+        }
+
+        .item-card {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #7e22ce;
+            transition: all 0.3s ease;
+        }
+
+        .item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(126, 34, 206, 0.2);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .item-title {
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        .item-details {
+            color: #636e72;
+            font-size: 14px;
+        }
+
+        .error-message {
+            background: #ff7675;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .success-message {
+            background: #00b894;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #7e22ce;
+            font-weight: 600;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .role-junior { background: #f59e0b; color: white; }
+        .role-senior { background: #3b82f6; color: white; }
+        .role-expert { background: #7e22ce; color: white; }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .proposals-list, .reviewers-list {
+                grid-column: span 1;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(126, 34, 206, 0.1);
+            border: 1px solid rgba(126, 34, 206, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(126, 34, 206, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #7e22ce, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #636e72;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Anonymous Research Ethics Review</h1>
+            <p class="subtitle">Confidential Peer Review Platform for Research Ethics Assessment</p>
+        </header>
+
+        <div class="wallet-section">
+            <button id="connectWallet" class="btn">Connect Wallet</button>
+            <span id="walletAddress" class="hidden"></span>
+            <span id="networkStatus"></span>
+        </div>
+
+        <div id="errorMessage" class="error-message hidden"></div>
+        <div id="successMessage" class="success-message hidden"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalProposals">0</div>
+                <div class="stat-label">Total Proposals</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalReviewers">0</div>
+                <div class="stat-label">Registered Reviewers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeReviews">0</div>
+                <div class="stat-label">Active Reviews</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="completedReviews">0</div>
+                <div class="stat-label">Completed Reviews</div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="panel">
+                <h2>Submit Research Proposal</h2>
+                <div class="form-group">
+                    <label for="riskLevel">Risk Level (1-10)</label>
+                    <input type="number" id="riskLevel" min="1" max="10" placeholder="Rate the research risk level">
+                </div>
+                <div class="form-group">
+                    <label for="ethicsScore">Ethics Score (1-100)</label>
+                    <input type="number" id="ethicsScore" min="1" max="100" placeholder="Self-assessed ethics score">
+                </div>
+                <div class="form-group">
+                    <label for="reviewPeriod">Review Period (days)</label>
+                    <input type="number" id="reviewPeriod" min="7" max="90" placeholder="Review deadline in days">
+                </div>
+                <button id="submitProposal" class="btn">Submit Proposal</button>
+            </div>
+
+            <div class="panel">
+                <h2>Register as Reviewer</h2>
+                <div class="form-group">
+                    <label for="experienceYears">Experience (years)</label>
+                    <input type="number" id="experienceYears" min="1" max="20" placeholder="Years of research experience">
+                </div>
+                <div class="form-group">
+                    <label for="reviewerRole">Reviewer Role</label>
+                    <select id="reviewerRole">
+                        <option value="0">Junior Reviewer</option>
+                        <option value="1">Senior Reviewer</option>
+                        <option value="2">Expert Reviewer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="qualificationScore">Qualification Score (1-1000)</label>
+                    <input type="number" id="qualificationScore" min="1" max="1000" placeholder="Professional qualification score">
+                </div>
+                <button id="registerReviewer" class="btn">Register as Reviewer</button>
+            </div>
+
+            <div class="panel">
+                <h2>Submit Review</h2>
+                <div class="form-group">
+                    <label for="reviewProposalId">Proposal ID</label>
+                    <input type="number" id="reviewProposalId" placeholder="ID of proposal to review">
+                </div>
+                <div class="form-group">
+                    <label for="reviewerId">Your Reviewer ID</label>
+                    <input type="number" id="reviewerId" placeholder="Your registered reviewer ID">
+                </div>
+                <div class="form-group">
+                    <label for="ethicsRating">Ethics Rating (1-10)</label>
+                    <input type="number" id="ethicsRating" min="1" max="10" placeholder="Rate the ethics compliance">
+                </div>
+                <div class="form-group">
+                    <label for="riskAssessment">Risk Assessment (1-10)</label>
+                    <input type="number" id="riskAssessment" min="1" max="10" placeholder="Assess the research risks">
+                </div>
+                <div class="form-group">
+                    <label for="recommendation">Recommendation</label>
+                    <select id="recommendation">
+                        <option value="1">Reject</option>
+                        <option value="2">Requires Revision</option>
+                        <option value="3">Approve</option>
+                    </select>
+                </div>
+                <button id="submitReview" class="btn">Submit Review</button>
+            </div>
+
+            <div class="panel">
+                <h2>Admin Functions</h2>
+                <div class="form-group">
+                    <label for="assignProposalId">Proposal ID</label>
+                    <input type="number" id="assignProposalId" placeholder="Proposal ID to assign reviewers">
+                </div>
+                <div class="form-group">
+                    <label for="reviewerIds">Reviewer IDs (comma-separated)</label>
+                    <input type="text" id="reviewerIds" placeholder="e.g., 1,2,3">
+                </div>
+                <button id="assignReviewers" class="btn">Assign Reviewers</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="panel proposals-list">
+                <h2>Research Proposals</h2>
+                <div id="proposalsList" class="loading">Loading proposals...</div>
+            </div>
+
+            <div class="panel reviewers-list">
+                <h2>Registered Reviewers</h2>
+                <div id="reviewersList" class="loading">Loading reviewers...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        // Anonymous Research Ethics Review DApp
+        class EthicsReviewApp {
+            constructor() {
+                this.provider = null;
+                this.signer = null;
+                this.contract = null;
+                this.userAddress = null;
+
+                // Contract configuration
+                this.contractAddress = "0x96104da4AEfA1ba63ab994d87143Cf2130E06ef8";
+                this.contractABI = [
+                    "function submitResearchProposal(uint8 _riskLevel, uint8 _ethicsScore, uint256 _reviewPeriodDays) external returns (uint32)",
+                    "function registerAsReviewer(uint8 _experienceYears, uint8 _role, uint32 _qualificationScore) external returns (uint32)",
+                    "function submitAnonymousReview(uint32 _proposalId, uint32 _reviewerId, uint8 _ethicsRating, uint8 _riskAssessment, uint8 _recommendation) external",
+                    "function assignReviewersToProposal(uint32 _proposalId, uint32[] calldata _reviewerIds) external",
+                    "function getProposalInfo(uint32 _proposalId) external view returns (uint8, uint256, uint256, uint32, uint32, address)",
+                    "function getReviewerInfo(uint32 _reviewerId) external view returns (uint8, bool, bool, uint256, uint256)",
+                    "function getReviewProgress(uint32 _proposalId) external view returns (uint32[] memory, bool[] memory)",
+                    "function nextProposalId() external view returns (uint32)",
+                    "function nextReviewerId() external view returns (uint32)",
+                    "function admin() external view returns (address)",
+                    "event ProposalSubmitted(uint32 indexed proposalId, address indexed submitter, uint256 deadline)",
+                    "event ReviewerRegistered(uint32 indexed reviewerId, uint8 role)",
+                    "event ReviewAssigned(uint32 indexed proposalId, uint32 indexed reviewerId)",
+                    "event ReviewSubmitted(uint32 indexed proposalId, uint32 indexed reviewerId)",
+                    "event ProposalStatusUpdated(uint32 indexed proposalId, uint8 newStatus)",
+                    "event EthicsDecisionReached(uint32 indexed proposalId, uint8 finalDecision)"
+                ];
+
+                this.init();
+            }
+
+            async init() {
+                this.setupEventListeners();
+                await this.checkConnection();
+                this.loadData();
+            }
+
+            setupEventListeners() {
+                // Wallet connection
+                document.getElementById('connectWallet').addEventListener('click', () => {
+                    console.log('Connect wallet clicked');
+                    this.connectWallet();
+                });
+
+                // Form submissions
+                document.getElementById('submitProposal').addEventListener('click', () => this.submitProposal());
+                document.getElementById('registerReviewer').addEventListener('click', () => this.registerReviewer());
+                document.getElementById('submitReview').addEventListener('click', () => this.submitReview());
+                document.getElementById('assignReviewers').addEventListener('click', () => this.assignReviewers());
+            }
+
+            async checkConnection() {
+                if (typeof window.ethereum !== 'undefined') {
+                    try {
+                        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                        if (accounts.length > 0) {
+                            await this.connectWallet();
+                        }
+                    } catch (error) {
+                        console.error('Error checking connection:', error);
+                    }
+                }
+            }
+
+            async connectWallet() {
+                try {
+                    console.log('Attempting to connect wallet...');
+
+                    if (typeof window.ethereum === 'undefined') {
+                        this.showError('Please install MetaMask to use this application');
+                        return;
+                    }
+
+                    // Request account access
+                    console.log('Requesting account access...');
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                    // Initialize provider and signer
+                    this.provider = new ethers.providers.Web3Provider(window.ethereum);
+                    this.signer = this.provider.getSigner();
+                    this.userAddress = await this.signer.getAddress();
+
+                    console.log('Connected to address:', this.userAddress);
+
+                    // Initialize contract
+                    this.contract = new ethers.Contract(this.contractAddress, this.contractABI, this.signer);
+
+                    // Update UI
+                    document.getElementById('connectWallet').style.display = 'none';
+                    document.getElementById('walletAddress').textContent = `Connected: ${this.userAddress.slice(0, 6)}...${this.userAddress.slice(-4)}`;
+                    document.getElementById('walletAddress').classList.remove('hidden');
+
+                    // Check network
+                    await this.checkNetwork();
+
+                    // Load data
+                    this.loadData();
+
+                    this.showSuccess('Wallet connected successfully');
+
+                } catch (error) {
+                    console.error('Error connecting wallet:', error);
+                    this.showError('Failed to connect wallet: ' + error.message);
+                }
+            }
+
+            async checkNetwork() {
+                try {
+                    const network = await this.provider.getNetwork();
+                    const networkStatus = document.getElementById('networkStatus');
+
+                    if (network.chainId === 11155111) { // Sepolia
+                        networkStatus.textContent = '✓ Sepolia Testnet';
+                        networkStatus.style.color = '#00b894';
+                    } else {
+                        networkStatus.textContent = '⚠ Wrong Network - Please switch to Sepolia';
+                        networkStatus.style.color = '#e17055';
+                        this.showError('Please switch to Sepolia testnet');
+                    }
+                } catch (error) {
+                    console.error('Error checking network:', error);
+                }
+            }
+
+            async loadData() {
+                if (!this.contract) return;
+
+                await Promise.all([
+                    this.loadProposals(),
+                    this.loadReviewers(),
+                    this.loadStats()
+                ]);
+            }
+
+            async loadProposals() {
+                try {
+                    const nextProposalId = await this.contract.nextProposalId();
+                    const proposalsList = document.getElementById('proposalsList');
+                    proposalsList.innerHTML = '';
+
+                    if (nextProposalId == 1) {
+                        proposalsList.innerHTML = '<p>No proposals submitted yet.</p>';
+                        return;
+                    }
+
+                    for (let i = 1; i < nextProposalId; i++) {
+                        try {
+                            const proposalInfo = await this.contract.getProposalInfo(i);
+                            const [status, submissionTime, reviewDeadline, assignedReviewers, completedReviews, submitter] = proposalInfo;
+
+                            const proposalCard = this.createProposalCard(i, {
+                                status,
+                                submissionTime,
+                                reviewDeadline,
+                                assignedReviewers,
+                                completedReviews,
+                                submitter
+                            });
+
+                            proposalsList.appendChild(proposalCard);
+                        } catch (error) {
+                            console.error(`Error loading proposal ${i}:`, error);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Error loading proposals:', error);
+                    document.getElementById('proposalsList').innerHTML = '<p>Error loading proposals.</p>';
+                }
+            }
+
+            async loadReviewers() {
+                try {
+                    const nextReviewerId = await this.contract.nextReviewerId();
+                    const reviewersList = document.getElementById('reviewersList');
+                    reviewersList.innerHTML = '';
+
+                    if (nextReviewerId == 1) {
+                        reviewersList.innerHTML = '<p>No reviewers registered yet.</p>';
+                        return;
+                    }
+
+                    for (let i = 1; i < nextReviewerId; i++) {
+                        try {
+                            const reviewerInfo = await this.contract.getReviewerInfo(i);
+                            const [role, isActive, isAvailable, totalReviews, registrationTime] = reviewerInfo;
+
+                            const reviewerCard = this.createReviewerCard(i, {
+                                role,
+                                isActive,
+                                isAvailable,
+                                totalReviews,
+                                registrationTime
+                            });
+
+                            reviewersList.appendChild(reviewerCard);
+                        } catch (error) {
+                            console.error(`Error loading reviewer ${i}:`, error);
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Error loading reviewers:', error);
+                    document.getElementById('reviewersList').innerHTML = '<p>Error loading reviewers.</p>';
+                }
+            }
+
+            async loadStats() {
+                try {
+                    const nextProposalId = await this.contract.nextProposalId();
+                    const nextReviewerId = await this.contract.nextReviewerId();
+
+                    document.getElementById('totalProposals').textContent = Math.max(0, nextProposalId - 1);
+                    document.getElementById('totalReviewers').textContent = Math.max(0, nextReviewerId - 1);
+
+                    // Count active reviews and completed reviews
+                    let activeReviews = 0;
+                    let completedReviews = 0;
+
+                    for (let i = 1; i < nextProposalId; i++) {
+                        try {
+                            const proposalInfo = await this.contract.getProposalInfo(i);
+                            const [status, , , assignedReviewers, completed] = proposalInfo;
+
+                            if (status == 1) { // UnderReview
+                                activeReviews++;
+                            }
+                            completedReviews += parseInt(completed);
+                        } catch (error) {
+                            console.error(`Error loading proposal ${i} for stats:`, error);
+                        }
+                    }
+
+                    document.getElementById('activeReviews').textContent = activeReviews;
+                    document.getElementById('completedReviews').textContent = completedReviews;
+
+                } catch (error) {
+                    console.error('Error loading stats:', error);
+                }
+            }
+
+            createProposalCard(id, data) {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+
+                const statusText = this.getStatusText(data.status);
+                const statusClass = this.getStatusClass(data.status);
+
+                card.innerHTML = `
+                    <div class="item-header">
+                        <div class="item-title">Proposal #${id}</div>
+                        <span class="status-indicator ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="item-details">
+                        <p><strong>Submitter:</strong> ${data.submitter.slice(0, 6)}...${data.submitter.slice(-4)}</p>
+                        <p><strong>Submitted:</strong> ${new Date(data.submissionTime * 1000).toLocaleDateString()}</p>
+                        <p><strong>Deadline:</strong> ${new Date(data.reviewDeadline * 1000).toLocaleDateString()}</p>
+                        <p><strong>Progress:</strong> ${data.completedReviews}/${data.assignedReviewers} reviews completed</p>
+                    </div>
+                `;
+
+                return card;
+            }
+
+            createReviewerCard(id, data) {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+
+                const roleText = this.getRoleText(data.role);
+                const roleClass = this.getRoleClass(data.role);
+
+                card.innerHTML = `
+                    <div class="item-header">
+                        <div class="item-title">Reviewer #${id}</div>
+                        <span class="role-badge ${roleClass}">${roleText}</span>
+                    </div>
+                    <div class="item-details">
+                        <p><strong>Status:</strong> ${data.isActive ? (data.isAvailable ? 'Available' : 'Busy') : 'Inactive'}</p>
+                        <p><strong>Total Reviews:</strong> ${data.totalReviews}</p>
+                        <p><strong>Registered:</strong> ${new Date(data.registrationTime * 1000).toLocaleDateString()}</p>
+                    </div>
+                `;
+
+                return card;
+            }
+
+            getStatusText(status) {
+                const statuses = ['Submitted', 'Under Review', 'Approved', 'Rejected', 'Requires Revision'];
+                return statuses[status] || 'Unknown';
+            }
+
+            getStatusClass(status) {
+                const classes = ['status-submitted', 'status-under-review', 'status-approved', 'status-rejected', 'status-requires-revision'];
+                return classes[status] || '';
+            }
+
+            getRoleText(role) {
+                const roles = ['Junior', 'Senior', 'Expert'];
+                return roles[role] || 'Unknown';
+            }
+
+            getRoleClass(role) {
+                const classes = ['role-junior', 'role-senior', 'role-expert'];
+                return classes[role] || '';
+            }
+
+            showError(message) {
+                const errorDiv = document.getElementById('errorMessage');
+                const successDiv = document.getElementById('successMessage');
+
+                successDiv.classList.add('hidden');
+                errorDiv.textContent = message;
+                errorDiv.classList.remove('hidden');
+
+                setTimeout(() => {
+                    errorDiv.classList.add('hidden');
+                }, 5000);
+            }
+
+            showSuccess(message) {
+                const errorDiv = document.getElementById('errorMessage');
+                const successDiv = document.getElementById('successMessage');
+
+                errorDiv.classList.add('hidden');
+                successDiv.textContent = message;
+                successDiv.classList.remove('hidden');
+
+                setTimeout(() => {
+                    successDiv.classList.add('hidden');
+                }, 5000);
+            }
+
+            async submitProposal() {
+                try {
+                    if (!this.contract) {
+                        this.showError('Please connect your wallet first');
+                        return;
+                    }
+
+                    const riskLevel = parseInt(document.getElementById('riskLevel').value);
+                    const ethicsScore = parseInt(document.getElementById('ethicsScore').value);
+                    const reviewPeriod = parseInt(document.getElementById('reviewPeriod').value);
+
+                    if (!riskLevel || !ethicsScore || !reviewPeriod) {
+                        this.showError('Please fill in all fields');
+                        return;
+                    }
+
+                    if (riskLevel < 1 || riskLevel > 10) {
+                        this.showError('Risk level must be between 1 and 10');
+                        return;
+                    }
+
+                    if (ethicsScore < 1 || ethicsScore > 100) {
+                        this.showError('Ethics score must be between 1 and 100');
+                        return;
+                    }
+
+                    if (reviewPeriod < 7 || reviewPeriod > 90) {
+                        this.showError('Review period must be between 7 and 90 days');
+                        return;
+                    }
+
+                    this.showSuccess('Submitting proposal... Please confirm transaction');
+
+                    const tx = await this.contract.submitResearchProposal(riskLevel, ethicsScore, reviewPeriod);
+
+                    this.showSuccess('Transaction submitted. Waiting for confirmation...');
+                    await tx.wait();
+
+                    this.showSuccess('Research proposal submitted successfully!');
+
+                    // Clear form
+                    document.getElementById('riskLevel').value = '';
+                    document.getElementById('ethicsScore').value = '';
+                    document.getElementById('reviewPeriod').value = '';
+
+                    // Reload data
+                    this.loadData();
+
+                } catch (error) {
+                    console.error('Error submitting proposal:', error);
+                    this.showError('Failed to submit proposal: ' + error.message);
+                }
+            }
+
+            async registerReviewer() {
+                try {
+                    if (!this.contract) {
+                        this.showError('Please connect your wallet first');
+                        return;
+                    }
+
+                    const experienceYears = parseInt(document.getElementById('experienceYears').value);
+                    const reviewerRole = parseInt(document.getElementById('reviewerRole').value);
+                    const qualificationScore = parseInt(document.getElementById('qualificationScore').value);
+
+                    if (!experienceYears || qualificationScore === undefined) {
+                        this.showError('Please fill in all fields');
+                        return;
+                    }
+
+                    if (experienceYears < 1 || experienceYears > 20) {
+                        this.showError('Experience must be between 1 and 20 years');
+                        return;
+                    }
+
+                    if (qualificationScore < 1 || qualificationScore > 1000) {
+                        this.showError('Qualification score must be between 1 and 1000');
+                        return;
+                    }
+
+                    this.showSuccess('Registering as reviewer... Please confirm transaction');
+
+                    const tx = await this.contract.registerAsReviewer(experienceYears, reviewerRole, qualificationScore);
+
+                    this.showSuccess('Transaction submitted. Waiting for confirmation...');
+                    await tx.wait();
+
+                    this.showSuccess('Reviewer registration successful!');
+
+                    // Clear form
+                    document.getElementById('experienceYears').value = '';
+                    document.getElementById('reviewerRole').value = '0';
+                    document.getElementById('qualificationScore').value = '';
+
+                    // Reload data
+                    this.loadData();
+
+                } catch (error) {
+                    console.error('Error registering reviewer:', error);
+                    this.showError('Failed to register reviewer: ' + error.message);
+                }
+            }
+
+            async submitReview() {
+                try {
+                    if (!this.contract) {
+                        this.showError('Please connect your wallet first');
+                        return;
+                    }
+
+                    const proposalId = parseInt(document.getElementById('reviewProposalId').value);
+                    const reviewerId = parseInt(document.getElementById('reviewerId').value);
+                    const ethicsRating = parseInt(document.getElementById('ethicsRating').value);
+                    const riskAssessment = parseInt(document.getElementById('riskAssessment').value);
+                    const recommendation = parseInt(document.getElementById('recommendation').value);
+
+                    if (!proposalId || !reviewerId || !ethicsRating || !riskAssessment || !recommendation) {
+                        this.showError('Please fill in all fields');
+                        return;
+                    }
+
+                    if (ethicsRating < 1 || ethicsRating > 10) {
+                        this.showError('Ethics rating must be between 1 and 10');
+                        return;
+                    }
+
+                    if (riskAssessment < 1 || riskAssessment > 10) {
+                        this.showError('Risk assessment must be between 1 and 10');
+                        return;
+                    }
+
+                    this.showSuccess('Submitting review... Please confirm transaction');
+
+                    const tx = await this.contract.submitAnonymousReview(proposalId, reviewerId, ethicsRating, riskAssessment, recommendation);
+
+                    this.showSuccess('Transaction submitted. Waiting for confirmation...');
+                    await tx.wait();
+
+                    this.showSuccess('Review submitted successfully!');
+
+                    // Clear form
+                    document.getElementById('reviewProposalId').value = '';
+                    document.getElementById('reviewerId').value = '';
+                    document.getElementById('ethicsRating').value = '';
+                    document.getElementById('riskAssessment').value = '';
+                    document.getElementById('recommendation').value = '1';
+
+                    // Reload data
+                    this.loadData();
+
+                } catch (error) {
+                    console.error('Error submitting review:', error);
+                    this.showError('Failed to submit review: ' + error.message);
+                }
+            }
+
+            async assignReviewers() {
+                try {
+                    if (!this.contract) {
+                        this.showError('Please connect your wallet first');
+                        return;
+                    }
+
+                    const proposalId = parseInt(document.getElementById('assignProposalId').value);
+                    const reviewerIdsInput = document.getElementById('reviewerIds').value;
+
+                    if (!proposalId || !reviewerIdsInput) {
+                        this.showError('Please fill in all fields');
+                        return;
+                    }
+
+                    const reviewerIds = reviewerIdsInput.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+
+                    if (reviewerIds.length < 2 || reviewerIds.length > 5) {
+                        this.showError('Please assign between 2 and 5 reviewers');
+                        return;
+                    }
+
+                    this.showSuccess('Assigning reviewers... Please confirm transaction');
+
+                    const tx = await this.contract.assignReviewersToProposal(proposalId, reviewerIds);
+
+                    this.showSuccess('Transaction submitted. Waiting for confirmation...');
+                    await tx.wait();
+
+                    this.showSuccess('Reviewers assigned successfully!');
+
+                    // Clear form
+                    document.getElementById('assignProposalId').value = '';
+                    document.getElementById('reviewerIds').value = '';
+
+                    // Reload data
+                    this.loadData();
+
+                } catch (error) {
+                    console.error('Error assigning reviewers:', error);
+                    this.showError('Failed to assign reviewers: ' + error.message);
+                }
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if ethers is loaded
+            if (typeof ethers === 'undefined') {
+                console.error('Ethers.js not loaded');
+                document.getElementById('errorMessage').textContent = 'Failed to load Web3 library. Please refresh the page.';
+                document.getElementById('errorMessage').classList.remove('hidden');
+                return;
+            }
+
+            console.log('Ethers.js loaded:', ethers.version);
+            window.app = new EthicsReviewApp();
+        });
+    </script>
+</body>
+</html>
