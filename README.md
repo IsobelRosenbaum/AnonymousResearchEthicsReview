@@ -1,252 +1,190 @@
 # Anonymous Research Ethics Review Platform
 
-A decentralized platform for confidential peer review of research ethics using Fully Homomorphic Encryption (FHE) on blockchain technology.
+A decentralized platform for conducting confidential peer review of research ethics proposals using Fully Homomorphic Encryption (FHE) technology on blockchain.
 
-## 🌐 Live Demo
+## 🔬 Overview
 
-**Website:** [https://anonymous-research-ethics-review.vercel.app/](https://anonymous-research-ethics-review.vercel.app/)
+The Anonymous Research Ethics Review Platform revolutionizes the research ethics approval process by providing a transparent yet privacy-preserving system for evaluating research proposals. Using advanced FHE smart contracts, the platform ensures that sensitive ethical assessments remain confidential while maintaining the integrity and verifiability of the review process.
 
-**GitHub Repository:** [https://github.com/IsobelRosenbaum/AnonymousResearchEthicsReview](https://github.com/IsobelRosenbaum/AnonymousResearchEthicsReview)
+## 🎯 Core Concepts
 
-**Demo Video:** [Watch Demo](AnonymousResearchEthicsReview.mp4)
+### Privacy-Preserving Ethics Assessment
 
-## 📋 Overview
+This platform addresses a critical challenge in research ethics: maintaining reviewer anonymity and protecting sensitive evaluation data while ensuring accountability and transparency in the decision-making process.
 
-The Anonymous Research Ethics Review Platform revolutionizes how research ethics proposals are evaluated by combining blockchain transparency with privacy-preserving cryptography. Using Fully Homomorphic Encryption (FHE), sensitive research data and reviewer assessments remain confidential while maintaining the integrity of the peer review process.
+**Key Privacy Features:**
+- **Encrypted Risk Assessments**: Research risk levels (1-10 scale) are encrypted using FHE, ensuring only authorized parties can access sensitivity scores
+- **Confidential Ethics Scores**: Self-assessed ethics compliance scores (1-100 scale) remain private during the review process
+- **Anonymous Reviewer Credentials**: Reviewer qualifications and experience levels are encrypted to prevent bias
+- **Private Review Ratings**: Individual ethics ratings and risk assessments from reviewers are encrypted until final decision
 
-## 🔑 Core Concepts
+### FHE Smart Contract Architecture
 
-### Fully Homomorphic Encryption (FHE)
+The platform leverages Fully Homomorphic Encryption through the fhEVM library, enabling computation on encrypted data without revealing the underlying information.
 
-This platform leverages **FHE technology** to enable computations on encrypted data without ever decrypting it. This means:
-
-- Research proposals' sensitive details (risk levels, ethics scores) remain encrypted on-chain
-- Reviewer credentials and qualifications are protected
-- Anonymous reviews are submitted and processed in encrypted form
-- Final decisions are calculated on encrypted data, preserving complete confidentiality
-
-### Anonymous Research Ethics Review - Privacy-Preserving Research Ethics Assessment
-
-The platform provides a **privacy-first approach to research ethics evaluation**:
-
-- **Confidential Submissions**: Researchers submit proposals with encrypted risk assessments and ethics scores
-- **Anonymous Peer Review**: Reviewers evaluate proposals without revealing their identity or bias
-- **Blind Evaluation**: Reviewers cannot see each other's assessments until finalization
-- **Transparent Outcomes**: While data remains private, the review process is auditable on blockchain
-- **Decentralized Governance**: No central authority controls the review process
-
-## 🏗️ Smart Contract Architecture
-
-### FHE-Enabled Contract
-
-**Contract Address:** `0x96104da4AEfA1ba63ab994d87143Cf2130E06ef8`
-
-**Network:** Sepolia Testnet
-
-The smart contract implements:
-
-```solidity
-- Research Proposal Management (encrypted risk/ethics data)
-- Anonymous Reviewer Registration (encrypted credentials)
-- Confidential Review Submission (encrypted ratings)
-- Automated Decision Processing (FHE computations)
-- Role-Based Access Control
+**Contract Address (Sepolia Testnet):**
+```
+0x96104da4AEfA1ba63ab994d87143Cf2130E06ef8
 ```
 
-### Key Features
+**Core FHE Operations:**
+1. **Encrypted Proposal Submission**: Research proposals include encrypted risk levels and ethics scores
+2. **Anonymous Reviewer Registration**: Reviewers register with encrypted experience levels and qualification scores
+3. **Confidential Review Process**: All review ratings and assessments are encrypted on-chain
+4. **Privacy-Preserving Decision Making**: Final ethics decisions are computed using FHE operations on encrypted review data
 
-#### For Researchers
-- **Submit Research Proposals** with encrypted risk and ethics assessments
-- **Track Review Progress** without exposing sensitive details
-- **Receive Final Decisions** with transparent justification
+### Workflow
 
-#### For Reviewers
-- **Anonymous Registration** with encrypted qualifications
-- **Confidential Evaluation** of proposals
-- **Protected Identity** throughout the review process
-- **Reputation System** without compromising anonymity
+**1. Research Proposal Submission**
+- Researchers submit proposals with encrypted risk and ethics assessments
+- Review deadline is established (7-90 days)
+- Proposal enters "Submitted" status
 
-#### For Administrators
-- **Assign Reviewers** to proposals based on encrypted qualifications
-- **Monitor Review Progress** without accessing confidential data
-- **Ensure Process Integrity** through blockchain immutability
+**2. Reviewer Assignment**
+- Platform administrators assign 2-5 qualified reviewers to each proposal
+- Reviewers are selected based on encrypted qualification scores
+- Proposal status updates to "Under Review"
 
-## 🎯 Use Cases
+**3. Anonymous Review Process**
+- Assigned reviewers submit confidential evaluations including:
+  - Ethics rating (1-10): Compliance with ethical standards
+  - Risk assessment (1-10): Potential risks to participants or community
+  - Recommendation: Reject, Requires Revision, or Approve
 
-### 1. Medical Research Ethics
-Evaluate sensitive medical research proposals involving human subjects while protecting patient data and institutional identities.
+**4. Automated Decision**
+- Once all reviews are submitted, the smart contract processes encrypted data
+- Final decision reached through majority voting mechanism
+- Proposal status updated to: Approved, Rejected, or Requires Revision
 
-### 2. Cross-Institutional Collaboration
-Enable researchers from multiple institutions to participate in ethics review without revealing institutional affiliations or competitive research directions.
+## 🎥 Demo
 
-### 3. Whistleblower-Friendly Reviews
-Allow anonymous submission of ethically questionable research practices for peer review without fear of retaliation.
+Watch the platform in action: [Demo Video](./AnonymousResearchEthicsReview.mp4)
 
-### 4. International Research Standards
-Facilitate global research ethics assessment while respecting regional privacy regulations (GDPR, HIPAA, etc.).
+Experience the live application: [https://anonymous-research-ethics-review.vercel.app/](https://anonymous-research-ethics-review.vercel.app/)
 
-## 🔐 Privacy Guarantees
+## 🏗️ Technical Architecture
 
-### What Remains Private (Encrypted)
-- Research risk levels and ethics scores
-- Reviewer experience and qualifications
-- Individual review ratings and recommendations
-- Interim decision calculations
+### Smart Contract Components
 
-### What Is Public (Transparent)
-- Proposal submission timestamps
-- Number of assigned reviewers
-- Review completion status
-- Final approval/rejection outcomes
-- Contract audit trail
+**Data Structures:**
+- `ResearchProposal`: Contains encrypted risk levels, ethics scores, and review metadata
+- `AnonymousReviewer`: Stores encrypted reviewer credentials and performance metrics
+- `ConfidentialReview`: Holds encrypted review ratings and recommendations
 
-## 🎨 Technology Stack
+**Key Functions:**
+- `submitResearchProposal()`: Submit new proposal with encrypted data
+- `registerAsReviewer()`: Register as reviewer with encrypted credentials
+- `submitAnonymousReview()`: Submit confidential review assessment
+- `assignReviewersToProposal()`: Admin function to assign reviewers
+- `processEthicsDecision()`: Automated decision making on encrypted reviews
 
-- **Blockchain:** Ethereum (Sepolia Testnet)
-- **Encryption:** Zama fhEVM (Fully Homomorphic Encryption)
-- **Smart Contracts:** Solidity ^0.8.24
-- **Frontend:** Vanilla JavaScript, HTML5, CSS3
-- **Web3 Library:** ethers.js v5.7.2
-- **Wallet Integration:** MetaMask
+### Privacy Guarantees
+
+**Access Control:**
+- FHE ACL (Access Control List) system manages who can decrypt specific data
+- Proposal submitters can only decrypt their own proposal data
+- Reviewers cannot see other reviewers' assessments
+- Platform admin cannot access encrypted review content
+
+**Decryption Flow:**
+- Individual encrypted values require proper authorization
+- Final decisions use FHE batch decryption with cryptographic proof validation
+- All decryption operations are logged on-chain for auditability
+
+## 🔐 Security Features
+
+- **Zero-Knowledge Review**: Reviewers remain anonymous to prevent retaliation or bias
+- **Tamper-Proof Records**: All proposals and reviews are immutably stored on blockchain
+- **Verifiable Randomness**: Reviewer performance scores use verifiable random functions
+- **Multi-Reviewer Consensus**: Requires 2-5 independent reviews for decision validity
+- **Time-Locked Reviews**: Enforced deadlines prevent review manipulation
+
+## 🌟 Use Cases
+
+### Academic Research Ethics Boards
+- University IRB (Institutional Review Board) evaluations
+- Multi-institutional collaborative research approvals
+- International ethics committee reviews
+
+### Clinical Trial Ethics
+- Pharmaceutical research ethics assessment
+- Medical device trial approvals
+- Patient safety protocol reviews
+
+### Social Science Research
+- Human subjects research evaluation
+- Sensitive population study approvals
+- Data privacy compliance reviews
+
+### Corporate Research Ethics
+- Internal ethics committee decisions
+- Cross-border research compliance
+- Stakeholder impact assessments
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+- MetaMask or compatible Web3 wallet
+- Sepolia testnet ETH for gas fees
+- Access to Sepolia RPC endpoint
 
-1. **MetaMask Wallet**: Install [MetaMask](https://metamask.io/) browser extension
-2. **Sepolia Testnet**: Switch to Sepolia network in MetaMask
-3. **Test ETH**: Obtain Sepolia ETH from [faucet](https://sepoliafaucet.com/)
+### Quick Start
 
-### How to Use
+1. **Connect Wallet**
+   - Visit the platform URL
+   - Click "Connect Wallet"
+   - Approve MetaMask connection
+   - Ensure you're on Sepolia testnet
 
-#### 1. Connect Wallet
-Click "Connect Wallet" button and approve MetaMask connection.
+2. **Submit a Research Proposal**
+   - Enter risk level (1-10)
+   - Provide ethics self-assessment score (1-100)
+   - Set review period (7-90 days)
+   - Submit transaction
 
-#### 2. Submit Research Proposal
-- Navigate to "Submit Research Proposal" panel
-- Enter **Risk Level** (1-10 scale)
-- Enter **Ethics Score** (1-100 scale)
-- Set **Review Period** (7-90 days)
-- Click "Submit Proposal" and confirm transaction
+3. **Register as Reviewer**
+   - Enter years of experience (1-20)
+   - Select role: Junior, Senior, or Expert
+   - Provide qualification score (1-1000)
+   - Complete registration
 
-#### 3. Register as Reviewer
-- Navigate to "Register as Reviewer" panel
-- Enter **Years of Experience** (1-20)
-- Select **Reviewer Role** (Junior/Senior/Expert)
-- Enter **Qualification Score** (1-1000)
-- Click "Register as Reviewer" and confirm transaction
+4. **Submit Review** (for assigned reviewers)
+   - Enter proposal ID
+   - Provide your reviewer ID
+   - Rate ethics compliance (1-10)
+   - Assess research risks (1-10)
+   - Make recommendation: Reject, Revise, or Approve
 
-#### 4. Submit Review (For Assigned Reviewers)
-- Navigate to "Submit Review" panel
-- Enter **Proposal ID** to review
-- Enter your **Reviewer ID**
-- Rate **Ethics Compliance** (1-10)
-- Assess **Research Risk** (1-10)
-- Make **Recommendation** (Reject/Revise/Approve)
-- Click "Submit Review" and confirm transaction
-
-#### 5. Assign Reviewers (Admin Only)
-- Navigate to "Admin Functions" panel
-- Enter **Proposal ID**
-- Enter **Reviewer IDs** (comma-separated, 2-5 reviewers)
-- Click "Assign Reviewers" and confirm transaction
-
-## 📊 Review Process Flow
-
-```
-1. Researcher submits encrypted proposal
-   ↓
-2. Admin assigns qualified reviewers (based on encrypted credentials)
-   ↓
-3. Reviewers submit anonymous encrypted evaluations
-   ↓
-4. Smart contract aggregates encrypted reviews using FHE
-   ↓
-5. Final decision calculated on encrypted data
-   ↓
-6. Decision published (Approved/Rejected/Requires Revision)
-   ↓
-7. Detailed reviews remain confidential
-```
-
-## 🎓 Educational Value
-
-This platform demonstrates:
-
-- **Real-world FHE application** in peer review systems
-- **Privacy-preserving blockchain** use cases
-- **Decentralized governance** for academic processes
-- **Anonymous voting/rating** mechanisms
-- **Encrypted data aggregation** techniques
-
-## 🔬 Research Impact
-
-### Benefits for Scientific Community
-
-1. **Eliminates Bias**: Anonymous reviews prevent institutional, gender, or nationality bias
-2. **Protects Whistleblowers**: Safe reporting of unethical research practices
-3. **Enables Collaboration**: Researchers can seek ethics review without exposing IP
-4. **Global Standards**: Decentralized platform accessible worldwide
-5. **Immutable Records**: Permanent audit trail of ethics decisions
-
-### Compliance Features
-
-- **GDPR Compatible**: Encrypted personal data processing
-- **HIPAA Considerations**: Medical research data protection
-- **Research Ethics Boards**: Complementary tool for IRB/ERB processes
-- **Conflict of Interest**: Automated detection through encrypted reviewer matching
-
-## 🛡️ Security Features
-
-- **End-to-End Encryption**: FHE ensures data never exists in plaintext on-chain
-- **Non-Interactive Proofs**: Zama's fhEVM provides cryptographic guarantees
-- **Tamper-Proof Records**: Blockchain immutability prevents data manipulation
-- **Access Control**: Role-based permissions for different user types
-- **Deadline Enforcement**: Smart contract ensures timely reviews
-
-## 📈 Platform Statistics
+## 📊 Platform Statistics
 
 The dashboard displays real-time metrics:
-- **Total Proposals** submitted
-- **Registered Reviewers** count
-- **Active Reviews** in progress
-- **Completed Reviews** finalized
+- **Total Proposals**: Number of research proposals submitted
+- **Registered Reviewers**: Active ethics reviewers in the system
+- **Active Reviews**: Proposals currently under review
+- **Completed Reviews**: Total number of reviews submitted
 
-## 🌟 Future Enhancements
+## 🔗 Resources
 
-- **AI-Assisted Matching**: ML algorithms for optimal reviewer-proposal pairing
-- **Multi-Chain Support**: Expand to other blockchain networks
-- **Token Incentives**: Reward reviewers for quality assessments
-- **Reputation NFTs**: Issue certificates for reviewing contributions
-- **Advanced Analytics**: Privacy-preserving statistics on review trends
-- **Mobile Application**: Native mobile apps for iOS/Android
+- **GitHub Repository**: [https://github.com/IsobelRosenbaum/AnonymousResearchEthicsReview](https://github.com/IsobelRosenbaum/AnonymousResearchEthicsReview)
+- **Live Application**: [https://anonymous-research-ethics-review.vercel.app/](https://anonymous-research-ethics-review.vercel.app/)
+- **Smart Contract**: [View on Etherscan](https://sepolia.etherscan.io/address/0x96104da4AEfA1ba63ab994d87143Cf2130E06ef8)
 
 ## 🤝 Contributing
 
-We welcome contributions from the community! Areas for improvement:
+We welcome contributions to improve the Anonymous Research Ethics Review Platform. Whether it's bug fixes, feature enhancements, or documentation improvements, your input is valuable.
 
-- Enhanced UI/UX design
-- Additional language support
-- Smart contract optimizations
-- Documentation improvements
-- Testing and security audits
+## 📄 License
 
-## 📞 Contact & Support
-
-- **Issues**: Report bugs via [GitHub Issues](https://github.com/IsobelRosenbaum/AnonymousResearchEthicsReview/issues)
-- **Discussions**: Join [GitHub Discussions](https://github.com/IsobelRosenbaum/AnonymousResearchEthicsReview/discussions)
-- **Website**: [https://anonymous-research-ethics-review.vercel.app/](https://anonymous-research-ethics-review.vercel.app/)
+MIT License - Open source and free to use
 
 ## 🙏 Acknowledgments
 
-This project utilizes:
-- **Zama fhEVM**: For fully homomorphic encryption capabilities
-- **Ethereum Foundation**: For blockchain infrastructure
-- **OpenZeppelin**: For secure smart contract patterns
-- **MetaMask**: For wallet integration
+Built with:
+- **fhEVM**: Zama's Fully Homomorphic Encryption Virtual Machine
+- **Solidity**: Smart contract programming language
+- **Ethers.js**: Ethereum JavaScript library
+- **Sepolia**: Ethereum testnet for development and testing
 
 ---
 
-**Built with ❤️ for the global research community**
-
-*Empowering anonymous, unbiased, and privacy-preserving research ethics review through blockchain and cryptography.*
+**Empowering ethical research through privacy-preserving technology** 🔬🔐
